@@ -21,6 +21,7 @@ const FormulaScreen = () => {
   const subjectData = formulas[subject as keyof typeof formulas];
   const [seen, setSeen] = useState<number[]>([]);
   const [bookmarks, setBookmarks] = useState<number[]>([]);
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
@@ -32,6 +33,7 @@ const FormulaScreen = () => {
     };
     loadData();
   }, [subject]);
+  
 
   const markSeen = async (index: number) => {
     const updated = Array.from(new Set([...seen, index]));
