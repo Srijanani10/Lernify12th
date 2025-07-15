@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackParamList } from '../AppNavigator';
@@ -35,7 +41,7 @@ const FormulaScreen = () => {
 
   const toggleBookmark = async (index: number) => {
     const updated = bookmarks.includes(index)
-      ? bookmarks.filter(i => i !== index)
+      ? bookmarks.filter((i) => i !== index)
       : [...bookmarks, index];
     setBookmarks(updated);
     await AsyncStorage.setItem(`bookmarks-${subject}`, JSON.stringify(updated));
@@ -44,54 +50,109 @@ const FormulaScreen = () => {
   if (!subjectData) {
     return (
       <View style={styles.centered}>
-        <Text style={{ color: 'red' }}>❌ Error: Invalid subject "{subject}"</Text>
+        <Text style={{ color: 'red', fontSize: 18 }}>
+          ❌ Oops! Invalid subject "{subject}"
+        </Text>
       </View>
     );
   }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{subject} Formulas</Text>
-      {Object.entries(subjectData.topics).map(([topicName, formulasArr]) =>
-        formulasArr.map((item, index) => (
-          <View key={`${topicName}-${index}`}>
-            <Text style={{ fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>{topicName}</Text>
-            <Flashcard
-              formula={item.formula}
-              story={item.story}
-              onFlip={() => markSeen(index)}
-            />
-            <Text style={{ textAlign: 'center', color: seen.includes(index) ? 'green' : '#aaa' }}>
-              {seen.includes(index) ? '✅ Seen' : ''}
-            </Text>
-            <TouchableOpacity onPress={() => toggleBookmark(index)}>
-              <Text style={{ color: bookmarks.includes(index) ? 'green' : 'blue', textAlign: 'center' }}>
-                {bookmarks.includes(index) ? 'Bookmarked ✅' : 'Bookmark 🔖'}
+      <Text style={styles.title}>📘 {subject} Formulas</Text>
+
+      {Object.entries(subjectData.topics).map(([topicName, formulasArr], topicIndex) =>
+        formulasArr.map((item, index) => {
+          const globalIndex = topicIndex * 100 + index; // unique index per topic
+          return (
+            <View key={`${topicName}-${index}`} style={styles.card}>
+              <Text style={styles.topicTitle}>✨ {topicName}</Text>
+
+              <Flashcard
+                formula={item.formula}
+                story={item.story}
+                onFlip={() => markSeen(globalIndex)}
+              />
+
+              <Text style={styles.statusText}>
+                {seen.includes(globalIndex) ? '✅ Marked as Seen' : '👀 Flip to Learn'}
               </Text>
-            </TouchableOpacity>
-          </View>
-        ))
+
+              <TouchableOpacity
+                style={[
+                  styles.bookmarkButton,
+                  bookmarks.includes(globalIndex) && styles.bookmarked,
+                ]}
+                onPress={() => toggleBookmark(globalIndex)}
+              >
+                <Text style={styles.bookmarkText}>
+                  {bookmarks.includes(globalIndex)
+                    ? '🔖 Bookmarked'
+                    : '📌 Tap to Bookmark'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          );
+        })
       )}
     </ScrollView>
   );
 };
 
+export default FormulaScreen;
+
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#FFFDE7', // Light yellow
     padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 50,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 15,
+    color: '#F57F17',
+    marginBottom: 25,
     textAlign: 'center',
+  },
+  topicTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#6A1B9A',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  card: {
+    backgroundColor: '#FFF3E0',
+    padding: 20,
+    marginBottom: 30,
+    borderRadius: 15,
+    elevation: 5,
+  },
+  statusText: {
+    textAlign: 'center',
+    color: '#388E3C',
+    marginTop: 8,
+    fontSize: 16,
+  },
+  bookmarkButton: {
+    marginTop: 10,
+    paddingVertical: 10,
+    borderRadius: 15,
+    backgroundColor: '#81D4FA',
+    alignItems: 'center',
+  },
+  bookmarked: {
+    backgroundColor: '#AED581',
+  },
+  bookmarkText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#263238',
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFEBEE',
   },
 });
-
-export default FormulaScreen;
