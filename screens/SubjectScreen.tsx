@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../AppNavigator';
+import { RootStackParamList } from '../AppNavigator'; // ✅ Update path if needed
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Subject'>;
 
@@ -15,9 +15,22 @@ const SubjectScreen = () => {
       <Text style={styles.title}>Select a Subject</Text>
       {subjects.map(subject => (
         <View key={subject} style={styles.buttonGroup}>
-          <Button title={`📘 Learn ${subject}`} onPress={() => navigation.navigate('Formula', { subject })} />
+          <Button
+            title={`📘 Learn ${subject}`}
+            onPress={() => navigation.navigate('TopicList', { subject })}
+          />
           <View style={styles.spacer} />
-          <Button title={`🧠 Quiz: ${subject}`} onPress={() => navigation.navigate('Quiz', { subject })} color="#6200ee" />
+          <Button
+            title={`🧠 Quiz: ${subject}`}
+            onPress={() => navigation.navigate('Quiz', { subject })}
+            color="#6200ee"
+          />
+          <View style={styles.spacer} />
+          <Button
+            title="🔖 View Bookmarked Formulas"
+            onPress={() => navigation.navigate('Bookmarks', { subject })}
+            color="#009688"
+          />
         </View>
       ))}
     </View>
@@ -37,7 +50,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   buttonGroup: {
-    marginBottom: 20,
+    marginBottom: 30,
   },
   spacer: {
     height: 10,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, Pressable, View } from 'react-native';
+import { Text, StyleSheet, Pressable, View, Vibration } from 'react-native';
+import Sound from 'react-native-sound';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -11,59 +12,57 @@ import Animated, {
 type FlashcardProps = {
   formula: string;
   story: string;
+  onFlip?: () => void;
 };
 
-const Flashcard = ({ formula, story }: FlashcardProps) => {
+const playFlipSound = () => {
+  const flipSound = new Sound('flip.mp3', Sound.MAIN_BUNDLE, (error) => {
+    if (error) {
+      console.warn('Sound load error:', error);
+      return;
+    }
+    flipSound.play((success) => {
+      if (!success) console.warn('Sound playback failed');
+      flipSound.release();
+    });
+  });
+};
+
+const Flashcard = ({ formula, story, onFlip }: FlashcardProps) => {
   const rotateY = useSharedValue(0);
   const [flipped, setFlipped] = useState(false);
 
-  const frontAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          rotateY: `${interpolate(
-            rotateY.value,
-            [0, 180],
-            [0, 180],
-            Extrapolate.CLAMP
-          )}deg`,
-        },
-      ],
-      backfaceVisibility: 'hidden',
-      position: 'absolute',
-    };
-  });
+  const frontStyle = useAnimatedStyle(() => ({
+    transform: [
+      { rotateY: `${interpolate(rotateY.value, [0, 180], [0, 180], Extrapolate.CLAMP)}deg` }
+    ],
+    backfaceVisibility: 'hidden',
+    position: 'absolute',
+  }));
 
-  const backAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          rotateY: `${interpolate(
-            rotateY.value,
-            [0, 180],
-            [180, 360],
-            Extrapolate.CLAMP
-          )}deg`,
-        },
-      ],
-      backfaceVisibility: 'hidden',
-    };
-  });
+  const backStyle = useAnimatedStyle(() => ({
+    transform: [
+      { rotateY: `${interpolate(rotateY.value, [0, 180], [180, 360], Extrapolate.CLAMP)}deg` }
+    ],
+    backfaceVisibility: 'hidden',
+  }));
 
   const handleFlip = () => {
+    playFlipSound();
+    Vibration.vibrate(50);
     setFlipped(!flipped);
     rotateY.value = withTiming(flipped ? 0 : 180, { duration: 300 });
+    onFlip?.();
   };
 
   return (
     <Pressable onPress={handleFlip}>
       <View style={styles.cardWrapper}>
-        <Animated.View style={[styles.card, frontAnimatedStyle]}>
+        <Animated.View style={[styles.card, frontStyle]}>
           <Text style={styles.text}>🔢 {formula}</Text>
           <Text style={styles.hint}>(Tap to flip)</Text>
         </Animated.View>
-
-        <Animated.View style={[styles.card, backAnimatedStyle]}>
+        <Animated.View style={[styles.card, backStyle]}>
           <Text style={styles.text}>📖 {story}</Text>
           <Text style={styles.hint}>(Tap to flip)</Text>
         </Animated.View>

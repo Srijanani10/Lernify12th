@@ -10,19 +10,28 @@ type RouteProps = RouteProp<RootStackParamList, 'Formula'>;
 
 const FormulaScreen = () => {
   const route = useRoute<RouteProps>();
-  const { subject } = route.params;
+  const { subject } = route.params as { subject: string };
 
-  const subjectData = formulas[subject];
-
+  const subjectData = formulas[subject as keyof typeof formulas];
+  const [seen, setSeen] = useState<number[]>([]);
   const [bookmarks, setBookmarks] = useState<number[]>([]);
 
   useEffect(() => {
-    const load = async () => {
-      const saved = await AsyncStorage.getItem(`bookmarks-${subject}`);
-      if (saved) setBookmarks(JSON.parse(saved));
+    const loadData = async () => {
+      const seenStored = await AsyncStorage.getItem(`seen-${subject}`);
+      if (seenStored) setSeen(JSON.parse(seenStored));
+
+      const bookmarksStored = await AsyncStorage.getItem(`bookmarks-${subject}`);
+      if (bookmarksStored) setBookmarks(JSON.parse(bookmarksStored));
     };
-    load();
+    loadData();
   }, [subject]);
+
+  const markSeen = async (index: number) => {
+    const updated = Array.from(new Set([...seen, index]));
+    setSeen(updated);
+    await AsyncStorage.setItem(`seen-${subject}`, JSON.stringify(updated));
+  };
 
   const toggleBookmark = async (index: number) => {
     const updated = bookmarks.includes(index)
@@ -43,16 +52,26 @@ const FormulaScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{subject} Formulas</Text>
-      {subjectData.formulas.map((item, index) => (
-        <View key={index}>
-          <Flashcard formula={item.formula} story={item.story} />
-          <TouchableOpacity onPress={() => toggleBookmark(index)}>
-            <Text style={{ color: bookmarks.includes(index) ? 'green' : 'blue', textAlign: 'center' }}>
-              {bookmarks.includes(index) ? 'Bookmarked ✅' : 'Bookmark 🔖'}
+      {Object.entries(subjectData.topics).map(([topicName, formulasArr]) =>
+        formulasArr.map((item, index) => (
+          <View key={`${topicName}-${index}`}>
+            <Text style={{ fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>{topicName}</Text>
+            <Flashcard
+              formula={item.formula}
+              story={item.story}
+              onFlip={() => markSeen(index)}
+            />
+            <Text style={{ textAlign: 'center', color: seen.includes(index) ? 'green' : '#aaa' }}>
+              {seen.includes(index) ? '✅ Seen' : ''}
             </Text>
-          </TouchableOpacity>
-        </View>
-      ))}
+            <TouchableOpacity onPress={() => toggleBookmark(index)}>
+              <Text style={{ color: bookmarks.includes(index) ? 'green' : 'blue', textAlign: 'center' }}>
+                {bookmarks.includes(index) ? 'Bookmarked ✅' : 'Bookmark 🔖'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ))
+      )}
     </ScrollView>
   );
 };
