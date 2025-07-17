@@ -21,7 +21,7 @@ const FormulaScreen = () => {
   const subjectData = formulas[subject as keyof typeof formulas];
   const [seen, setSeen] = useState<number[]>([]);
   const [bookmarks, setBookmarks] = useState<number[]>([]);
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -33,7 +33,6 @@ const FormulaScreen = () => {
     };
     loadData();
   }, [subject]);
-  
 
   const markSeen = async (index: number) => {
     const updated = Array.from(new Set([...seen, index]));
@@ -47,6 +46,10 @@ const FormulaScreen = () => {
       : [...bookmarks, index];
     setBookmarks(updated);
     await AsyncStorage.setItem(`bookmarks-${subject}`, JSON.stringify(updated));
+  };
+
+  const handleTopicPress = (topicName: string) => {
+    setSelectedTopic((prev) => (prev === topicName ? null : topicName));
   };
 
   if (!subjectData) {
@@ -63,40 +66,50 @@ const FormulaScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>📘 {subject} Formulas</Text>
 
-      {Object.entries(subjectData.topics).map(([topicName, formulasArr], topicIndex) =>
-        formulasArr.map((item, index) => {
-          const globalIndex = topicIndex * 100 + index; // unique index per topic
-          return (
-            <View key={`${topicName}-${index}`} style={styles.card}>
-              <Text style={styles.topicTitle}>✨ {topicName}</Text>
+      {Object.entries(subjectData.topics).map(([topicName, formulasArr], topicIndex) => (
+        <View key={topicName}>
+          <TouchableOpacity
+            onPress={() => handleTopicPress(topicName)}
+            style={styles.topicButton}
+          >
+            <Text style={styles.topicTitle}>
+              {selectedTopic === topicName ? '🔽' : '▶️'} {topicName}
+            </Text>
+          </TouchableOpacity>
 
-              <Flashcard
-                formula={item.formula}
-                story={item.story}
-                onFlip={() => markSeen(globalIndex)}
-              />
+          {selectedTopic === topicName &&
+            formulasArr.map((item, index) => {
+              const globalIndex = topicIndex * 100 + index;
+              return (
+                <View key={`${topicName}-${index}`} style={styles.card}>
+                  <Flashcard
+                    formula={item.formula}
+                    story={item.story}
+                    onFlip={() => markSeen(globalIndex)}
+                  />
 
-              <Text style={styles.statusText}>
-                {seen.includes(globalIndex) ? '✅ Marked as Seen' : '👀 Flip to Learn'}
-              </Text>
+                  <Text style={styles.statusText}>
+                    {seen.includes(globalIndex) ? '✅ Marked as Seen' : '👀 Flip to Learn'}
+                  </Text>
 
-              <TouchableOpacity
-                style={[
-                  styles.bookmarkButton,
-                  bookmarks.includes(globalIndex) && styles.bookmarked,
-                ]}
-                onPress={() => toggleBookmark(globalIndex)}
-              >
-                <Text style={styles.bookmarkText}>
-                  {bookmarks.includes(globalIndex)
-                    ? '🔖 Bookmarked'
-                    : '📌 Tap to Bookmark'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          );
-        })
-      )}
+                  <TouchableOpacity
+                    style={[
+                      styles.bookmarkButton,
+                      bookmarks.includes(globalIndex) && styles.bookmarked,
+                    ]}
+                    onPress={() => toggleBookmark(globalIndex)}
+                  >
+                    <Text style={styles.bookmarkText}>
+                      {bookmarks.includes(globalIndex)
+                        ? '🔖 Bookmarked'
+                        : '📌 Tap to Bookmark'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+        </View>
+      ))}
     </ScrollView>
   );
 };
@@ -105,7 +118,7 @@ export default FormulaScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFDE7', // Light yellow
+    backgroundColor: '#FFFDE7',
     padding: 20,
     paddingBottom: 50,
   },
@@ -116,17 +129,22 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     textAlign: 'center',
   },
+  topicButton: {
+    backgroundColor: '#F3E5F5',
+    borderRadius: 12,
+    padding: 12,
+    marginVertical: 10,
+  },
   topicTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#6A1B9A',
-    marginBottom: 10,
     textAlign: 'center',
   },
   card: {
     backgroundColor: '#FFF3E0',
     padding: 20,
-    marginBottom: 30,
+    marginVertical: 10,
     borderRadius: 15,
     elevation: 5,
   },

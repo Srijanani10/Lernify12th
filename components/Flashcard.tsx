@@ -8,6 +8,7 @@ import Animated, {
   interpolate,
   Extrapolate,
 } from 'react-native-reanimated';
+import MathView from 'react-native-math-view';
 
 type FlashcardProps = {
   formula: string;
@@ -81,14 +82,18 @@ const Flashcard = ({
   return (
     <Pressable onPress={handleFlip}>
       <View style={styles.cardWrapper}>
+        {/* Front Side */}
         <Animated.View style={[styles.card, frontStyle]}>
-          <Text style={styles.icon}>🔢</Text>
-          <Text style={styles.text}>{formula}</Text>
+          <MathView
+            math={formula}
+            style={styles.mathView}
+            // resizeMode="cover"
+          />
           <Text style={styles.hint}>👆 Tap to flip</Text>
         </Animated.View>
 
+        {/* Back Side */}
         <Animated.View style={[styles.card, backStyle]}>
-          <Text style={styles.icon}>📖</Text>
           <Text style={styles.text}>{story}</Text>
           <Text style={styles.hint}>👆 Tap to flip back</Text>
         </Animated.View>
@@ -118,15 +123,15 @@ const styles = StyleSheet.create({
     borderColor: '#FFD54F',
     borderWidth: 2,
   },
-  icon: {
-    fontSize: 24,
-    marginBottom: 10,
+  mathView: {
+    width: '100%',
+    minHeight: 40,
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#3E2723',
     textAlign: 'center',
-    fontWeight: 'bold',
+    lineHeight: 22,
   },
   hint: {
     fontSize: 12,

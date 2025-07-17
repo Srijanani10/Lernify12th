@@ -23,12 +23,46 @@ type FormulasData = {
 const formulas: FormulasData = {
   Physics: {
     topics: {
-      Kinematics: [
-        { formula: 'v = u + at', story: 'A car speeding up over time.' },
-        { formula: 's = ut + ½at²', story: 'Distance when speeding.' },
+      "⚡ ELECTRIC CHARGES AND FIELDS ⚡": [
+        {
+          formula: 'F = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{q_1 q_2}{r^2}',
+          story: '🔋🔋 → 📏📏 → 💥\n🧲 Coulomb’s Law'
+        },
+        {
+          formula: '\\varepsilon_r = \\frac{\\varepsilon}{\\varepsilon_0}',
+          story: '📦⚡ Relative Permittivity (Dielectric Constant)'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{q}{r^2}',
+          story: '🌐 Electric field intensity at a point distant r from a point charge q'
+        },
+        {
+          formula: 'p = q \\times 2a',
+          story: '🧲 Electric dipole moment from two opposite charges.'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{2p}{(r^2 - a^2)^2}',
+          story: '📍 Electric Field on the axial line of dipole.\n (i)At the point r from the centre of the electric dipole.'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{2p}{r^3}',
+          story: '🌌 Electric Field on the axial line of dipole.\n (ii)At very large distance i.e., (r >> a)'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{p}{(r^2 + a^2)^{3/2}}',
+          story: '🌀 Field on the equatorial line of dipole.\n(i)At the point at a distance r from the centre of electric dipole'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{p}{r^3}',
+          story: '🌍 Field on the equatorial line of dipole.\n (ii)At very large distance i.e., r > > a'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{p}{r^3} \\sqrt{1 + 3\\cos^2\\theta}',
+          story: '🌟 Electric field intensity at any point due to an electric dipole, where θ is the angle from the dipole axis.'
+        }
       ],
       Dynamics: [
-        { formula: 'F = ma', story: 'Push a box to accelerate it.' },
+        { formula: 'F = ma', story: '💪 Push a box to accelerate it.' },
       ],
     },
     quiz: [],
@@ -37,7 +71,7 @@ const formulas: FormulasData = {
   Chemistry: {
     topics: {
       MoleConcept: [
-        { formula: 'n = m/M', story: 'How many moles of substance.' },
+        { formula: 'n = \\frac{m}{M}', story: 'How many moles of substance.' },
       ],
     },
     quiz: [],
@@ -46,12 +80,12 @@ const formulas: FormulasData = {
   Maths: {
     topics: {
       Algebra: [
-        { formula: '(a + b)² = a² + 2ab + b²', story: 'Expanding binomials like (2 + 3)².' },
-        { formula: 'a² - b² = (a - b)(a + b)', story: 'Difference of squares example.' },
+        { formula: '(a + b)^2 = a^2 + 2ab + b^2', story: 'Expanding binomials like (2 + 3)^2.' },
+        { formula: 'a^2 - b^2 = (a - b)(a + b)', story: 'Difference of squares example.' },
       ],
       Geometry: [
-        { formula: 'Area of circle = πr²', story: 'Pizza slice problem 🍕.' },
-        { formula: 'Perimeter of rectangle = 2(l + b)', story: 'Measuring frame of a photo.' },
+        { formula: '\\text{Area of circle} = \\pi r^2', story: 'Pizza slice problem 🍕.' },
+        { formula: '\\text{Perimeter of rectangle} = 2(l + b)', story: 'Measuring frame of a photo.' },
       ],
     },
     quiz: [
@@ -91,13 +125,13 @@ const formulas: FormulasData = {
   Biology: {
     topics: {
       CellBiology: [
-        { formula: 'Mitochondria = Powerhouse of the cell', story: 'It produces energy ⚡.' },
-        { formula: 'Ribosomes = Protein factories', story: 'They make proteins for the cell.' },
-        { formula: 'Nucleus = Control center', story: 'It controls all cell activities.' },
+        { formula: '\\text{Mitochondria} = \\text{Powerhouse of the cell}', story: 'It produces energy ⚡.' },
+        { formula: '\\text{Ribosomes} = \\text{Protein factories}', story: 'They make proteins for the cell.' },
+        { formula: '\\text{Nucleus} = \\text{Control center}', story: 'It controls all cell activities.' },
       ],
       HumanBody: [
-        { formula: 'Heart = Pumps blood', story: 'It beats to circulate blood.' },
-        { formula: 'Lungs = Help in breathing', story: 'They bring oxygen in and push carbon dioxide out.' },
+        { formula: '\\text{Heart} = \\text{Pumps blood}', story: 'It beats to circulate blood.' },
+        { formula: '\\text{Lungs} = \\text{Help in breathing}', story: 'They bring oxygen in and push carbon dioxide out.' },
       ],
     },
     quiz: [

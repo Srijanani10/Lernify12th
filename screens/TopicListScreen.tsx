@@ -1,18 +1,16 @@
-// screens/TopicListScreen.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Button, ScrollView, StyleSheet } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../AppNavigator';
-import formulas from '../data/formulas'; // ✅ make sure data is structured correctly
+import formulas from '../data/formulas';
 
 type TopicListRouteProp = RouteProp<RootStackParamList, 'TopicList'>;
 
 const TopicListScreen = () => {
   const route = useRoute<TopicListRouteProp>();
-  const navigation = useNavigation();
   const { subject } = route.params;
-
   const topics = Object.keys(formulas[subject]?.topics || {});
+  const [expandedTopic, setExpandedTopic] = useState<string | null>(null);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -25,9 +23,20 @@ const TopicListScreen = () => {
             <Button
               title={topic}
               onPress={() =>
-                navigation.navigate('Topic' as never, { subject, topic } as never)
+                setExpandedTopic(expandedTopic === topic ? null : topic)
               }
             />
+            {expandedTopic === topic && (
+              <View style={styles.formulasContainer}>
+                {(formulas[subject].topics[topic] || []).map(
+                  (formula: any, idx: number) => (
+                    <Text key={idx} style={styles.formulaText}>
+                      {formula}
+                    </Text>
+                  )
+                )}
+              </View>
+            )}
           </View>
         ))
       )}
@@ -54,6 +63,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 30,
     color: '#888',
+  },
+  formulasContainer: {
+    backgroundColor: '#f5f5f5',
+    padding: 10,
+    marginTop: 5,
+    borderRadius: 6,
+  },
+  formulaText: {
+    fontSize: 16,
+    marginBottom: 4,
   },
 });
 
