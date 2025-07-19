@@ -54,12 +54,44 @@ const formulas: FormulasData = {
         },
         {
           formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{p}{r^3}',
-          story: '🌍 Field on the equatorial line of dipole.\n (ii)At very large distance i.e., r > > a'
+          story: '🌍 Field on the equatorial line of dipole.\n (ii)At very large distance i.e. r > > a'
         },
         {
           formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{p}{r^3} \\sqrt{1 + 3\\cos^2\\theta}',
           story: '🌟 Electric field intensity at any point due to an electric dipole, where θ is the angle from the dipole axis.'
-        }
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{qr}{(r^2 + a^2)^{3/2}}',
+          story: '💡 Electric field intensity due to a charged ring\n (i)At a point on its axis at distance r from its centre'
+        }, 
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{q}{r^2}',
+          story: '💡 Electric field intensity due to a charged ring\n (ii)At very large distance i.e. r >> a'
+        },
+        {
+          formula: '\\tau = pE \\sin\\theta',
+          story: '🌌 Torque on an electric dipole placed in a uniform electric field'
+        },
+        {
+          formula: 'U = -pE (\\cos\\theta_2 - \\cos\\theta_1)',
+          story: '🌠 Potential energy change of an electric dipole in a uniform electric field between angles θ₁ and θ₂'
+        },
+        {
+          formula: '\\Phi_E = \\oint \\vec{E} \\cdot d\\vec{A}',
+          story: '🌌 Electric flux'
+        },
+        {
+          formula: '\\Phi_E = \\frac{q_{\\text{encl}}}{\\varepsilon_0}',
+          story: '🌌 Gauss’s law: The total electric flux through a closed surface is equal to the enclosed charge divided by the permittivity of free space.'
+        },
+        {
+          formula: 'E = \\frac{\\lambda}{2\\pi\\varepsilon_0 r}',
+          story: '🌌 Electric field due to thin infinitely long straight wire of uniform linear charge density λ'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{q}{r^2}',
+          story: '🛡️ Electric field due to a uniformly charged spherical shell at a point outside the shell (r > R)'
+        },
       ],
       Dynamics: [
         { formula: 'F = ma', story: '💪 Push a box to accelerate it.' },
