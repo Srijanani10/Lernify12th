@@ -92,6 +92,18 @@ const formulas: FormulasData = {
           formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{q}{r^2}',
           story: '🛡️ Electric field due to a uniformly charged spherical shell at a point outside the shell (r > R)'
         },
+        {
+          formula: 'E = 0',
+          story: '🛡️ Electric field inside a uniformly charged spherical shell (r < R)'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{q}{R^2}',
+          story: '🛡️ Electric field at the surface of a uniformly charged spherical shell'
+        },
+        {
+          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{q}{r^2}',
+          story: '🌌 Electric field due to a point charge at distance r'
+        },
       ],
       Dynamics: [
         { formula: 'F = ma', story: '💪 Push a box to accelerate it.' },
