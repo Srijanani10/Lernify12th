@@ -88,10 +88,6 @@ const formulas: FormulasData = {
           formula: 'E = \\frac{\\lambda}{2\\pi\\varepsilon_0 r}',
           story: '🌌 Electric field due to thin infinitely long straight wire of uniform linear charge density λ'
         },
-        {
-          formula: 'E = \\frac{1}{4\\pi\\varepsilon_0} \\cdot \\frac{q}{r^2}',
-          story: '🛡️ Electric field due to a uniformly charged spherical shell at a point outside the shell (r > R)'
-        },
       ],
       Dynamics: [
         { formula: 'F = ma', story: '💪 Push a box to accelerate it.' },
